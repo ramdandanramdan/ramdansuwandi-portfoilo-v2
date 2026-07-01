@@ -67,23 +67,23 @@ export default function EducationPage() {
         </motion.div>
 
         {/* Bars */}
-        <div className="flex items-end justify-center gap-10 md:gap-16 mt-0">
+        <div className="flex flex-col md:flex-row items-stretch md:items-end justify-center gap-6 md:gap-16 mt-0">
           {educations.map((edu, i) => {
             const start = formatDate(edu.start_date);
             const end = formatDate(edu.end_date);
             const period = start ? `${start}${end ? ` — ${end}` : ' — Present'}` : '';
             const isLast = i === educations.length - 1;
-            const barHeight = isLast ? 'h-96 md:h-[28rem]' : 'h-80 md:h-96';
+            const barHeight = isLast ? 'h-64 md:h-[28rem]' : 'h-56 md:h-96';
             const imageSrc = edu.image_url || edu.images?.[0] || null;
 
             return (
               <div key={edu.id} className="flex flex-col items-center relative">
                 {/* Bar wrapper */}
-                <Link href={`/landing/education/${edu.id}`} className="block group z-10">
-                  <div className={`relative w-60 md:w-72 ${barHeight}`}>
+                <Link href={`/landing/education/${edu.id}`} className="block group z-10 w-full md:w-auto">
+                  <div className={`relative w-full md:w-72 ${barHeight}`}>
                     {/* Bar card */}
                     <motion.div
-                      className="glass-card w-full h-full rounded-t-2xl overflow-hidden cursor-pointer"
+                      className="glass-card w-full h-full rounded-xl md:rounded-t-2xl overflow-hidden cursor-pointer"
                       initial={{ scaleY: 0 }}
                       whileInView={{ scaleY: 1 }}
                       viewport={{ once: true, margin: '-40px' }}
@@ -135,7 +135,7 @@ export default function EducationPage() {
 
                       {/* Content */}
                       <motion.div
-                        className="absolute inset-0 flex flex-col justify-end p-5 md:p-6 z-20"
+                        className="absolute inset-0 flex flex-col justify-end p-4 md:p-6 z-20"
                         initial={{ opacity: 0, y: 15 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}

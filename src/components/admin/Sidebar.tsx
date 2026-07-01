@@ -54,7 +54,7 @@ const menuItems = [
   { label: 'Contact', href: '/admin/dashboard/contact' },
 ];
 
-export default function Sidebar() {
+export default function Sidebar({ mobileOpen, onMobileClose }: { mobileOpen?: boolean; onMobileClose?: () => void }) {
   const pathname = usePathname();
   const router = useRouter();
   const [collapsed, setCollapsed] = useState(false);
@@ -86,10 +86,9 @@ export default function Sidebar() {
     router.push('/admin/login');
   };
 
-  return (
-    <aside
-      className="h-screen fixed left-0 top-0 z-50 flex flex-col transition-all duration-500 bg-[var(--dark-card)] border-r border-[var(--glass-border)] group/sidebar"
-      style={{ width: collapsed ? 60 : 240 }}
+  const sidebarContent = (
+    <div
+      className="h-full flex flex-col bg-[var(--dark-card)]"
     >
       {/* Header */}
       <div className={`relative flex items-center gap-3 px-4 h-14 border-b border-[var(--glass-border)] overflow-hidden ${collapsed ? 'justify-center' : ''}`}>
@@ -121,7 +120,7 @@ export default function Sidebar() {
         {menuItems.map((item) => {
           const isActive = pathname === item.href || (item.href !== '/admin/dashboard' && pathname.startsWith(item.href));
           return (
-            <Link key={item.href} href={item.href}>
+            <Link key={item.href} href={item.href} onClick={onMobileClose}>
               <div
                 className={`relative flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer text-sm group/item transition-all duration-300 ${
                   isActive
@@ -184,6 +183,39 @@ export default function Sidebar() {
           {!collapsed && <span>Logout</span>}
         </button>
       </div>
-    </aside>
+    </div>
+  );
+
+  return (
+    <>
+      {/* Desktop sidebar */}
+      <aside
+        className="hidden md:block h-screen fixed left-0 top-0 z-40 transition-all duration-500 border-r border-[var(--glass-border)] group/sidebar"
+        style={{ width: collapsed ? 60 : 240 }}
+      >
+        {sidebarContent}
+      </aside>
+
+      {/* Mobile drawer */}
+      {mobileOpen && (
+        <>
+          <div
+            className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm md:hidden"
+            onClick={onMobileClose}
+          />
+          <aside
+            className="fixed left-0 top-0 bottom-0 z-50 w-[260px] max-w-[80vw] md:hidden animate-[slideIn_0.25s_ease-out] border-r border-[var(--glass-border)]"
+          >
+            {sidebarContent}
+          </aside>
+          <style>{`
+            @keyframes slideIn {
+              from { transform: translateX(-100%); }
+              to { transform: translateX(0); }
+            }
+          `}</style>
+        </>
+      )}
+    </>
   );
 }

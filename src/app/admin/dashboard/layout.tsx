@@ -24,6 +24,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const pathname = usePathname();
   const [isAuth, setIsAuth] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
   useEffect(() => {
     const auth = localStorage.getItem('admin_auth');
@@ -34,6 +35,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     }
     setLoading(false);
   }, [router]);
+
+  useEffect(() => {
+    setMobileSidebarOpen(false);
+  }, [pathname]);
 
   const basePath = '/' + pathname.split('/').slice(1, 3).join('/');
   const pageTitle = pageTitles[basePath] || 'Admin';
@@ -51,19 +56,36 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   return (
     <div className="min-h-screen bg-[var(--dark-bg)] flex relative">
       <InteractiveBackground3D />
-      <Sidebar />
+      <Sidebar
+        mobileOpen={mobileSidebarOpen}
+        onMobileClose={() => setMobileSidebarOpen(false)}
+      />
       <ToastProvider>
-        <main className="flex-1 min-h-screen relative z-10 transition-all duration-300" style={{ marginLeft: 240 }}>
+        <main className="flex-1 min-h-screen relative z-10 transition-all duration-300 md:ml-60">
           {/* Top bar */}
           <div className="sticky top-0 z-20 backdrop-blur-xl bg-[var(--dark-bg)]/80 border-b border-[var(--glass-border)]">
-            <div className="flex items-center justify-between h-14 px-6">
-              <div>
-                <h1 className="text-sm font-semibold text-white">{pageTitle}</h1>
-                <p className="text-[10px] text-[var(--text-secondary)] mt-0.5 capitalize">
-                  {basePath === '/admin/dashboard' ? 'Overview' : 'Manage your content'}
-                </p>
+            <div className="flex items-center justify-between h-14 px-3 md:px-6">
+              <div className="flex items-center gap-3 min-w-0">
+                {/* Mobile hamburger */}
+                <button
+                  onClick={() => setMobileSidebarOpen(true)}
+                  className="md:hidden p-2 -ml-1 rounded-lg text-[var(--text-secondary)] hover:text-white hover:bg-[rgba(255,255,255,0.05)] transition-colors"
+                  aria-label="Open sidebar"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="3" y1="6" x2="21" y2="6" />
+                    <line x1="3" y1="12" x2="21" y2="12" />
+                    <line x1="3" y1="18" x2="21" y2="18" />
+                  </svg>
+                </button>
+                <div className="min-w-0">
+                  <h1 className="text-sm font-semibold text-white truncate">{pageTitle}</h1>
+                  <p className="text-[10px] text-[var(--text-secondary)] mt-0.5 capitalize truncate">
+                    {basePath === '/admin/dashboard' ? 'Overview' : 'Manage your content'}
+                  </p>
+                </div>
               </div>
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 shrink-0">
                 <a
                   href="/landing"
                   target="_blank"
@@ -77,7 +99,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           </div>
 
           {/* Content */}
-          <div className="p-6">
+          <div className="p-3 md:p-6">
             {children}
           </div>
         </main>

@@ -211,6 +211,17 @@ body {
   border-radius: 3px;
 }
 
+/* Mobile touch-friendly tap targets */
+@media (max-width: 767px) {
+  button, a, input, select, textarea {
+    cursor: default;
+    -webkit-tap-highlight-color: transparent;
+  }
+  input, textarea, select {
+    font-size: 16px !important;
+  }
+}
+
 /* Flicker animation for headings */
 @keyframes flicker {
   0%, 100% { opacity: 1; }

@@ -29,15 +29,15 @@ export default function AdminLogin() {
     }
   };
 
-  return (
-    <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden bg-[var(--dark-bg)]">
+    return (
+    <div className="min-h-screen flex items-center justify-center p-3 md:p-4 relative overflow-hidden bg-[var(--dark-bg)]">
       <InteractiveBackground3D />
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="glass p-8 rounded-2xl w-full max-w-md relative z-10"
+        className="glass p-5 md:p-8 rounded-2xl w-full max-w-md relative z-10 mx-auto"
       >
         <Link
           href="/landing"

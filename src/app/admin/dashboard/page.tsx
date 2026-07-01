@@ -100,7 +100,7 @@ export default function DashboardPage() {
   return (
     <div className="space-y-6">
       {/* Summary Row */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
         {[
           { label: 'Total Content', value: stats.total ?? 0, color: 'var(--electric-blue)', href: '' },
           { label: 'Total Visitors', value: stats.total_visitors ?? 0, color: '#0984e3', href: '' },
@@ -148,7 +148,7 @@ export default function DashboardPage() {
           </div>
           <Link href="/admin/dashboard/home" className="text-[11px] text-[var(--electric-blue)] hover:underline transition-opacity">Manage All</Link>
         </div>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
           {Object.entries(iconMap).map(([key, icon], i) => (
             <motion.div
               key={key}
@@ -195,9 +195,9 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-5 mb-5">
+        <div className="grid md:grid-cols-2 gap-4 md:gap-5 mb-5">
           {/* Visitors Chart */}
-          <div className="bg-[var(--dark-card)] border border-[var(--glass-border)] rounded-xl p-5">
+          <div className="bg-[var(--dark-card)] border border-[var(--glass-border)] rounded-xl p-4 md:p-5">
             <div className="flex items-center justify-between mb-4">
               <div>
                 <h3 className="text-xs font-semibold text-white tracking-wide">Visitors (14 days)</h3>
@@ -210,11 +210,13 @@ export default function DashboardPage() {
                 </span>
               </div>
             </div>
-            <VisitorsLineChart data={visitorDays} />
+            <div className="h-[200px] md:h-[250px]">
+              <VisitorsLineChart data={visitorDays} />
+            </div>
           </div>
 
           {/* Page Views */}
-          <div className="bg-[var(--dark-card)] border border-[var(--glass-border)] rounded-xl p-5">
+          <div className="bg-[var(--dark-card)] border border-[var(--glass-border)] rounded-xl p-4 md:p-5">
             <div className="flex items-center justify-between mb-4">
               <div>
                 <h3 className="text-xs font-semibold text-white tracking-wide">Page Views</h3>
@@ -222,16 +224,18 @@ export default function DashboardPage() {
               </div>
             </div>
             {pageViews.length === 0 ? (
-              <div className="flex items-center justify-center h-[250px] text-[var(--text-secondary)] text-xs">No data yet</div>
+              <div className="flex items-center justify-center h-[200px] md:h-[250px] text-[var(--text-secondary)] text-xs">No data yet</div>
             ) : (
-              <PageViewsBarChart data={pageViews} />
+              <div className="h-[200px] md:h-[250px]">
+                <PageViewsBarChart data={pageViews} />
+              </div>
             )}
           </div>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-5">
+        <div className="grid md:grid-cols-2 gap-4 md:gap-5">
           {/* Messages Chart */}
-          <div className="bg-[var(--dark-card)] border border-[var(--glass-border)] rounded-xl p-5">
+          <div className="bg-[var(--dark-card)] border border-[var(--glass-border)] rounded-xl p-4 md:p-5">
             <div className="flex items-center justify-between mb-4">
               <div>
                 <h3 className="text-xs font-semibold text-white tracking-wide">Messages (14 days)</h3>
@@ -244,11 +248,13 @@ export default function DashboardPage() {
                 </span>
               </div>
             </div>
-            <MessagesAreaChart data={messageDays} />
+            <div className="h-[200px] md:h-[250px]">
+              <MessagesAreaChart data={messageDays} />
+            </div>
           </div>
 
           {/* Skills Distribution */}
-          <div className="bg-[var(--dark-card)] border border-[var(--glass-border)] rounded-xl p-5">
+          <div className="bg-[var(--dark-card)] border border-[var(--glass-border)] rounded-xl p-4 md:p-5">
             <div className="flex items-center justify-between mb-4">
               <div>
                 <h3 className="text-xs font-semibold text-white tracking-wide">Skills by Category</h3>
@@ -261,7 +267,9 @@ export default function DashboardPage() {
                 </span>
               </div>
             </div>
-            <SkillsPieChart data={skillCategories} />
+            <div className="h-[200px] md:h-[250px]">
+              <SkillsPieChart data={skillCategories} />
+            </div>
             {skillCategories.length > 0 && (
               <div className="flex flex-wrap gap-x-5 gap-y-1 mt-3 pt-3 border-t border-[var(--glass-border)]">
                 {skillCategories.map((s, i) => (

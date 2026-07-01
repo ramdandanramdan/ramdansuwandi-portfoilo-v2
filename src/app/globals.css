@@ -245,12 +245,8 @@ body {
   92% { opacity: 1; }
 }
 
-h1, h2 {
+.flicker-text {
   animation: flicker 4s infinite;
-}
-
-h3 {
-  animation: flicker 6s infinite;
 }
 
 /* Theme color utilities */

@@ -168,7 +168,7 @@ export default function AchievementDetailPage() {
           {/* Right: Images */}
           <div className="lg:col-span-2">
             {images.length > 0 ? (
-              <div className={`grid ${images.length === 1 ? 'grid-cols-1' : 'grid-cols-2'} gap-3`}>
+              <div className={`grid ${images.length === 1 ? 'grid-cols-1' : 'grid-cols-1 sm:grid-cols-2'} gap-3`}>
                 {images.map((img, i) => (
                   <motion.div
                     key={i}

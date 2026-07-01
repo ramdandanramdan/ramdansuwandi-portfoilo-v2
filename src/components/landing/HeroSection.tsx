@@ -67,7 +67,7 @@ export default function HeroSection({ home }: { home: Home }) {
                 </p>
               )}
 
-              <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold leading-tight mb-4">
+              <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold leading-tight mb-4">
                 <span className="text-gradient">RAMDAN<br />SUWANDI</span>
               </h1>
 

@@ -192,7 +192,7 @@ export default function OrganizationDetailPage() {
           {/* Right: Images */}
           <div className="lg:col-span-2">
             {images.length > 0 ? (
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {images.map((img, i) => (
                   <motion.div
                     key={i}

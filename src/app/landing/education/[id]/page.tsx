@@ -274,7 +274,7 @@ export default function EducationDetailPage() {
                 )}
                 {/* Gallery */}
                 {restImages.length > 0 && (
-                  <div className="grid grid-cols-2 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     {restImages.map((img, i) => (
                       <motion.div
                         key={i}

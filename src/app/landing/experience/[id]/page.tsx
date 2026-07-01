@@ -181,7 +181,7 @@ export default function ExperienceDetailPage() {
           {/* Right: Images */}
           <div className="lg:col-span-2">
             {exp.images && exp.images.length > 0 ? (
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {exp.images.map((img, i) => (
                   <motion.div
                     key={i}

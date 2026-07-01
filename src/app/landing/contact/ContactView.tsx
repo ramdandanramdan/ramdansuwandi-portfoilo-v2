@@ -108,7 +108,7 @@ export default function ContactView({
           `}</style>
         </div>
 
-        <div className="mt-12 grid lg:grid-cols-5 gap-8">
+        <div className="mt-12 grid grid-cols-1 lg:grid-cols-5 gap-8">
           {/* Left: Contact Info */}
           <div className="lg:col-span-2 space-y-6">
             {/* Social Links */}

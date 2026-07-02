@@ -18,6 +18,8 @@ const fields = [
     fields: [
       { name: 'title', label: 'Title', type: 'text' as const },
       { name: 'description', label: 'Description', type: 'textarea' as const },
+      { name: 'link_project', label: 'Link Project', type: 'url' as const, placeholder: 'https://...' },
+      { name: 'documents', label: 'Dokumen (YT, Gdrive, etc.)', type: 'tags' as const, placeholder: 'Paste URL...' },
     ],
   },
   {

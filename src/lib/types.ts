@@ -11,7 +11,7 @@ export interface Home {
   stats: StatItem[];
   location: string | null;
   is_available: boolean;
-  work_portfolio: { title: string; description: string }[];
+  work_portfolio: { title: string; description: string; link_project?: string; documents?: string[] }[];
   achievements: { title: string; description: string }[];
   is_active: boolean;
   order_index: number;
@@ -114,7 +114,7 @@ export interface Organization {
   image_url: string | null;
   images: string[];
   website_url: string | null;
-  work_portfolio: { title: string; description: string }[];
+  work_portfolio: { title: string; description: string; link_project?: string; documents?: string[] }[];
   achievements: { title: string; description: string }[];
   is_active: boolean;
   order_index: number;

@@ -12,7 +12,7 @@ import { useToast } from './Toast';
 interface GroupSubField {
   name: string;
   label: string;
-  type: 'text' | 'url' | 'textarea';
+  type: 'text' | 'url' | 'textarea' | 'tags';
   placeholder?: string;
 }
 
@@ -45,6 +45,7 @@ export default function ItemForm({ title, fields, initialData, section, basePath
   const [error, setError] = useState('');
   const [previews, setPreviews] = useState<Record<string, string>>({});
   const [tagInputs, setTagInputs] = useState<Record<string, string>>({});
+  const [groupTagInputs, setGroupTagInputs] = useState<Record<string, string>>({});
   const fileInputRefs = useRef<Record<string, HTMLInputElement | null>>({});
   const { toast } = useToast();
 
@@ -185,6 +186,37 @@ export default function ItemForm({ title, fields, initialData, section, basePath
   const handleRemoveGroupItem = (name: string, index: number) => {
     const current = [...(Array.isArray(formData[name]) ? (formData[name] as Record<string, string>[]) : [])];
     current.splice(index, 1);
+    handleChange(name, current);
+  };
+
+  const handleGroupTagAdd = (name: string, index: number, subField: string) => {
+    const key = `${name}-${index}-${subField}`;
+    const input = groupTagInputs[key]?.trim();
+    if (!input) return;
+
+    const currentItems = formData[name] as Record<string, unknown>[] | undefined;
+    const currentTags: string[] = currentItems?.[index]?.[subField]
+      ? (currentItems[index][subField] as string[])
+      : [];
+
+    if (!currentTags.includes(input)) {
+      const current = [...(Array.isArray(formData[name]) ? (formData[name] as Record<string, unknown>[]) : [])];
+      if (!current[index]) current[index] = {};
+      current[index] = { ...current[index], [subField]: [...currentTags, input] };
+      handleChange(name, current);
+    }
+    setGroupTagInputs((prev) => ({ ...prev, [key]: '' }));
+  };
+
+  const handleGroupTagRemove = (name: string, index: number, subField: string, tagIndex: number) => {
+    const currentItems = formData[name] as Record<string, unknown>[] | undefined;
+    const currentTags: string[] = currentItems?.[index]?.[subField]
+      ? (currentItems[index][subField] as string[])
+      : [];
+
+    const current = [...(Array.isArray(formData[name]) ? (formData[name] as Record<string, unknown>[]) : [])];
+    if (!current[index]) current[index] = {};
+    current[index] = { ...current[index], [subField]: currentTags.filter((_, i) => i !== tagIndex) };
     handleChange(name, current);
   };
 
@@ -415,6 +447,49 @@ export default function ItemForm({ title, fields, initialData, section, basePath
                         <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
                         {expandedGroupField === `${field.name}-${i}-${sub.name}` ? 'Minimize' : 'Expand'}
                       </button>
+                    </div>
+                  ) : sub.type === 'tags' ? (
+                    <div className="space-y-1.5">
+                      {(() => {
+                        const tags: string[] = Array.isArray(item[sub.name]) ? (item[sub.name] as unknown as string[]) : [];
+                        const tagKey = `${field.name}-${i}-${sub.name}`;
+                        return (
+                          <>
+                            {tags.length > 0 && (
+                              <div className="flex flex-wrap gap-1">
+                                {tags.map((tag, j) => (
+                                  <span
+                                    key={j}
+                                    className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium"
+                                    style={{ background: 'rgba(0, 212, 255, 0.15)', color: 'var(--electric-blue)', border: '1px solid rgba(0, 212, 255, 0.25)' }}
+                                  >
+                                    <span className="truncate max-w-[140px]">{tag}</span>
+                                    <button type="button" onClick={() => handleGroupTagRemove(field.name, i, sub.name, j)} className="hover:opacity-70 text-[10px] ml-0.5">✕</button>
+                                  </span>
+                                ))}
+                              </div>
+                            )}
+                            <div className="flex gap-1">
+                              <input
+                                type="url"
+                                value={groupTagInputs[tagKey] || ''}
+                                onChange={(e) => setGroupTagInputs((prev) => ({ ...prev, [tagKey]: e.target.value }))}
+                                onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); handleGroupTagAdd(field.name, i, sub.name); } }}
+                                placeholder={sub.placeholder || 'Add URL...'}
+                                className="input-field text-xs flex-1"
+                              />
+                              <button
+                                type="button"
+                                onClick={() => handleGroupTagAdd(field.name, i, sub.name)}
+                                className="px-2.5 py-1 rounded-lg font-semibold text-xs"
+                                style={{ background: 'linear-gradient(135deg, var(--electric-blue), var(--neon-green))', color: '#000' }}
+                              >
+                                +
+                              </button>
+                            </div>
+                          </>
+                        );
+                      })()}
                     </div>
                   ) : (
                     <input

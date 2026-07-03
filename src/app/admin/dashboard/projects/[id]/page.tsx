@@ -11,7 +11,10 @@ const fields = [
   { name: 'link', label: 'Link (URL / YouTube embed / anything)', type: 'url' as const },
   { name: 'live_url', label: 'Live URL', type: 'url' as const },
   { name: 'github_url', label: 'GitHub URL', type: 'url' as const },
-  { name: 'category', label: 'Category', type: 'text' as const },
+  { name: 'category', label: 'Tipe Proyek', type: 'select' as const, placeholder: 'Pilih tipe proyek', options: [
+    { value: 'professional', label: 'Proyek Profesional' },
+    { value: 'personal', label: 'Proyek Pribadi' },
+  ] },
   { name: 'featured', label: 'Featured', type: 'checkbox' as const },
   {
     name: 'work_portfolio',

@@ -185,6 +185,36 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
   );
 }
 
+function ProjectSection({ title, subtitle, projects, icon }: { title: string; subtitle: string; projects: Project[]; icon: React.ReactNode }) {
+  if (projects.length === 0) return null;
+
+  return (
+    <div className="mb-16 last:mb-0">
+      <motion.div
+        initial={{ opacity: 0, y: 16 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        className="text-center mb-8"
+      >
+        <div className="flex items-center justify-center gap-3 mb-3">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[var(--electric-blue)]/15 to-[var(--neon-green)]/10 flex items-center justify-center">
+            {icon}
+          </div>
+        </div>
+        <h2 className="text-2xl md:text-3xl font-bold text-gradient">{title}</h2>
+        <p className="text-sm text-[var(--text-secondary)] mt-2 max-w-lg mx-auto">{subtitle}</p>
+        <div className="w-16 h-0.5 rounded-full bg-gradient-to-r from-[var(--electric-blue)] to-[var(--neon-green)] mx-auto mt-3" />
+      </motion.div>
+
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+        {projects.map((project, i) => (
+          <ProjectCard key={project.id} project={project} index={i} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function ProjectsPage() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
@@ -199,6 +229,9 @@ export default function ProjectsPage() {
   if (loading) return <div className="flex justify-center py-32"><div className="w-10 h-10 border-2 border-[var(--electric-blue)] border-t-transparent rounded-full animate-spin" /></div>;
   if (projects.length === 0) return null;
 
+  const professionalProjects = projects.filter((p) => p.category === 'professional');
+  const personalProjects = projects.filter((p) => p.category === 'personal');
+
   return (
     <section className="py-16 md:py-24 relative">
       {/* Ambient light */}
@@ -209,10 +242,28 @@ export default function ProjectsPage() {
       <div className="max-w-6xl mx-auto px-4 relative">
         <SectionHeader title="Projects" subtitle="Some things I have built" />
 
-        <div className="mt-12 grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {projects.map((project, i) => (
-            <ProjectCard key={project.id} project={project} index={i} />
-          ))}
+        <div className="mt-12">
+          <ProjectSection
+            title="Proyek Profesional"
+            subtitle="Proyek yang dikerjakan secara profesional untuk klien dan perusahaan"
+            icon={
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--electric-blue)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="2" y="7" width="20" height="14" rx="2" ry="2" /><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+              </svg>
+            }
+            projects={professionalProjects}
+          />
+
+          <ProjectSection
+            title="Proyek Pribadi"
+            subtitle="Proyek yang dikerjakan secara mandiri untuk pengembangan diri dan eksplorasi"
+            icon={
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--electric-blue)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" /><line x1="7" y1="7" x2="7.01" y2="7" />
+              </svg>
+            }
+            projects={personalProjects}
+          />
         </div>
       </div>
 

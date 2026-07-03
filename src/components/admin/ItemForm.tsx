@@ -16,16 +16,22 @@ interface GroupSubField {
   placeholder?: string;
 }
 
+interface SelectOption {
+  value: string;
+  label: string;
+}
+
 interface Field {
   name: string;
   label: string;
-  type: 'text' | 'textarea' | 'number' | 'url' | 'date' | 'email' | 'checkbox' | 'json' | 'file' | 'tags' | 'group' | 'multipleFiles' | 'documents' | 'hidden';
+  type: 'text' | 'textarea' | 'number' | 'url' | 'date' | 'email' | 'checkbox' | 'json' | 'file' | 'tags' | 'group' | 'multipleFiles' | 'documents' | 'hidden' | 'select';
   required?: boolean;
   placeholder?: string;
   accept?: string;
   defaultValue?: string;
   fields?: GroupSubField[];
   maxFiles?: number;
+  options?: SelectOption[];
 }
 
 interface ItemFormProps {
@@ -655,6 +661,22 @@ export default function ItemForm({ title, fields, initialData, section, basePath
             </label>
           )}
         </div>
+      );
+    }
+
+    if (field.type === 'select') {
+      return (
+        <select
+          value={value as string}
+          onChange={(e) => handleChange(field.name, e.target.value)}
+          className="input-field"
+          required={field.required}
+        >
+          <option value="">{field.placeholder || `Pilih ${field.label}`}</option>
+          {(field.options || []).map((opt) => (
+            <option key={opt.value} value={opt.value}>{opt.label}</option>
+          ))}
+        </select>
       );
     }
 

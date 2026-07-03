@@ -77,7 +77,7 @@ export default function AchievementsPage() {
     : [];
 
   return (
-    <section className="py-24 relative">
+    <section className="py-16 md:py-24 relative">
       <div className="max-w-6xl mx-auto px-4">
         <SectionHeader title="Achievements" subtitle="Awards and recognition" />
 
@@ -110,8 +110,8 @@ export default function AchievementsPage() {
                   )}
 
                   {/* Icon + Title */}
-                  <div className={`flex items-center gap-4 ${ach.image_url ? 'pt-4' : 'pt-6'} px-6 pb-4`}>
-                    <div className="w-14 h-14 rounded-2xl bg-[rgba(255,255,255,0.03)] border border-[var(--glass-border)] flex items-center justify-center text-3xl flex-shrink-0">
+                  <div className={`flex items-center gap-3 ${ach.image_url ? 'pt-3' : 'pt-4'} px-4 md:px-6 pb-3 md:pb-4`}>
+                    <div className="w-10 h-10 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-[rgba(255,255,255,0.03)] border border-[var(--glass-border)] flex items-center justify-center text-2xl md:text-3xl flex-shrink-0">
                       {getIcon(ach)}
                     </div>
                     <div className="min-w-0 flex-1">
@@ -123,7 +123,7 @@ export default function AchievementsPage() {
                   </div>
 
                   {/* Body */}
-                  <div className="px-6 pb-3 space-y-2 flex-1">
+                  <div className="px-4 md:px-6 pb-3 space-y-2 flex-1">
                     {ach.issuer && (
                       <p className="text-xs text-[var(--text-secondary)] flex items-center gap-1.5">
                         <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[var(--electric-blue)]">
@@ -150,7 +150,7 @@ export default function AchievementsPage() {
                   </div>
 
                   {/* Buttons */}
-                  <div className="px-6 pb-5 pt-2 flex items-center gap-2 border-t border-[var(--glass-border)]">
+                  <div className="px-4 md:px-6 pb-4 md:pb-5 pt-2 flex items-center gap-2 border-t border-[var(--glass-border)]">
                     <Link
                       href={`/landing/achievements/${ach.id}`}
                       className="flex-1 px-3 py-2 rounded-lg text-xs text-center text-[var(--text-secondary)] hover:text-white bg-[rgba(255,255,255,0.03)] hover:bg-[rgba(255,255,255,0.06)] transition-all"

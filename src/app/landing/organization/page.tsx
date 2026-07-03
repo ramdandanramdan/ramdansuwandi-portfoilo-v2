@@ -29,7 +29,7 @@ export default function OrganizationPage() {
   if (organizations.length === 0) return null;
 
   return (
-    <section className="py-24 relative">
+    <section className="py-16 md:py-24 relative">
       <div className="max-w-5xl mx-auto px-4">
         <SectionHeader title="Organizations" subtitle="Communities and groups I am part of" />
 
@@ -57,9 +57,9 @@ export default function OrganizationPage() {
 
                 {/* Card */}
                 <Link href={`/landing/organization/${org.id}`} className="block group">
-                  <div className="glass-card p-5 md:p-6 flex items-start gap-5 hover:border-[var(--neon-green)]/30 transition-all">
+                  <div className="glass-card p-4 md:p-6 flex items-start gap-3 md:gap-5 hover:border-[var(--neon-green)]/30 transition-all">
                     {/* Logo */}
-                    <div className="w-14 h-14 md:w-16 md:h-16 rounded-xl flex items-center justify-center text-2xl flex-shrink-0 overflow-hidden bg-[#1a1816] border border-[rgba(200,180,140,0.06)] group-hover:border-[var(--neon-green)]/20 transition-colors">
+                    <div className="w-10 h-10 md:w-16 md:h-16 rounded-xl flex items-center justify-center text-lg md:text-2xl flex-shrink-0 overflow-hidden bg-[#1a1816] border border-[rgba(200,180,140,0.06)] group-hover:border-[var(--neon-green)]/20 transition-colors">
                       {org.image_url ? (
                         <img src={org.image_url} alt={org.name} className="w-full h-full object-cover" />
                       ) : (

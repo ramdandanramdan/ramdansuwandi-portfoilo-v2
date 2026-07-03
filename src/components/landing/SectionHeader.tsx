@@ -14,7 +14,7 @@ export default function SectionHeader({ title, subtitle }: { title: string; subt
       <GlitchText as="h2" className="text-3xl md:text-4xl font-bold text-gradient mb-3">
         {title}
       </GlitchText>
-      {subtitle && <p className="text-[var(--text-secondary)] text-lg">{subtitle}</p>}
+      {subtitle && <p className="text-[var(--text-secondary)] text-sm md:text-lg">{subtitle}</p>}
     </motion.div>
   );
 }

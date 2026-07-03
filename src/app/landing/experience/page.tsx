@@ -30,7 +30,7 @@ export default function ExperiencePage() {
   if (experiences.length === 0) return null;
 
   return (
-    <section className="py-24 relative">
+    <section className="py-16 md:py-24 relative">
       <div className="max-w-6xl mx-auto px-4">
         <SectionHeader title="Experience" subtitle="Professional journey and work history" />
 

@@ -43,7 +43,7 @@ export default function EducationDetailPage() {
   const restImages: string[] = edu.image_url ? (edu.images || []) : [];
 
   return (
-    <section className="py-24 relative overflow-hidden">
+    <section className="py-16 md:py-24 relative overflow-hidden">
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-20 left-1/3 w-80 h-80 rounded-full bg-[var(--electric-blue)] opacity-[0.03] blur-[120px]" />
         <div className="absolute bottom-20 right-1/3 w-80 h-80 rounded-full bg-[var(--neon-green)] opacity-[0.03] blur-[120px]" />
@@ -64,11 +64,11 @@ export default function EducationDetailPage() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="grid grid-cols-1 lg:grid-cols-5 gap-8"
+          className="grid grid-cols-1 lg:grid-cols-5 gap-6 md:gap-8"
         >
           {/* Left: Content */}
           <div className="lg:col-span-3 space-y-6">
-            <div className="glass-card p-8 relative overflow-hidden">
+            <div className="glass-card p-4 md:p-8 relative overflow-hidden">
               <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[var(--electric-blue)] to-[var(--neon-green)]" />
 
               {/* Degree and school */}
@@ -263,7 +263,7 @@ export default function EducationDetailPage() {
                       src={edu.image_url}
                       alt={edu.degree}
                       className="w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                      style={{ aspectRatio: '16/9', minHeight: '180px' }}
+                      style={{ aspectRatio: '16/9', minHeight: '140px' }}
                     />
                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
                       <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="opacity-0 group-hover:opacity-100 transition-opacity drop-shadow-lg">

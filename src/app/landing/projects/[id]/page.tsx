@@ -48,7 +48,7 @@ export default function ProjectDetailPage() {
   const images = Array.isArray(project.images) ? project.images : (project.image_url ? [project.image_url] : []);
 
   return (
-    <section className="py-24 relative">
+    <section className="py-16 md:py-24 relative">
       <div className="max-w-6xl mx-auto px-4">
         <Link
           href="/landing/projects"
@@ -64,11 +64,11 @@ export default function ProjectDetailPage() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="grid grid-cols-1 lg:grid-cols-5 gap-8"
+          className="grid grid-cols-1 lg:grid-cols-5 gap-6 md:gap-8"
         >
           {/* Left: Content */}
           <div className="lg:col-span-3 space-y-6">
-            <div className="glass-card p-8">
+            <div className="glass-card p-4 md:p-8">
               {project.featured && (
                 <span className="inline-block text-[10px] font-bold text-black bg-[var(--electric-blue)] px-2.5 py-0.5 rounded-full mb-2">Featured</span>
               )}

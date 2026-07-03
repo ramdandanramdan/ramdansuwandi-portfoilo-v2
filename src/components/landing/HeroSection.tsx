@@ -50,9 +50,9 @@ export default function HeroSection({ home }: { home: Home }) {
   };
 
   return (
-    <section className="min-h-[calc(100vh-4rem)] flex items-center relative overflow-hidden py-20">
+    <section className="min-h-[calc(100vh-4rem)] flex items-center relative overflow-hidden py-12 md:py-20">
       <div className="max-w-7xl mx-auto px-4 w-full relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-center">
 
           {/* Left: Text Content */}
           <motion.div
@@ -67,7 +67,7 @@ export default function HeroSection({ home }: { home: Home }) {
                 </p>
               )}
 
-              <h1 className="flicker-text text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold leading-tight mb-4">
+              <h1 className="flicker-text text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-bold leading-tight mb-4">
                 <span className="text-gradient">RAMDAN<br />SUWANDI</span>
               </h1>
 
@@ -216,7 +216,7 @@ export default function HeroSection({ home }: { home: Home }) {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.3, duration: 0.6 }}
-              className="relative max-w-[380px] lg:max-w-[440px] w-full"
+              className="relative max-w-[260px] sm:max-w-[320px] lg:max-w-[440px] w-full"
               style={{ perspective: '1200px' }}
             >
               <motion.div

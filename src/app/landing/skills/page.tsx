@@ -21,14 +21,14 @@ export default function SkillsPage() {
   if (loading) return <div className="flex justify-center py-32"><div className="w-10 h-10 border-2 border-[var(--electric-blue)] border-t-transparent rounded-full animate-spin" /></div>;
 
   return (
-    <section className="py-24 relative">
+    <section className="py-16 md:py-24 relative">
       <div className="max-w-6xl mx-auto px-4">
         <SectionHeader title="Skills" subtitle="Technologies and tools I work with" />
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 md:gap-4 mt-8">
           {skills.map((skill, i) => (
-            <TiltCard key={skill.id} className="p-6 text-center" tiltDegree={5} glowSize={200}>
+            <TiltCard key={skill.id} className="p-4 md:p-6 text-center" tiltDegree={5} glowSize={200}>
               <div
-                className="w-14 h-14 mx-auto mb-3 rounded-xl flex items-center justify-center text-2xl transition-transform duration-300 bg-[#1a1816] border border-[rgba(200,180,140,0.06)]"
+                className="w-10 h-10 md:w-14 md:h-14 mx-auto mb-2 md:mb-3 rounded-xl flex items-center justify-center text-xl md:text-2xl transition-transform duration-300 bg-[#1a1816] border border-[rgba(200,180,140,0.06)]"
                 style={{ transform: 'translateZ(20px)', color: skill.color }}
               >
                 {skill.icon_url ? <img src={skill.icon_url} alt={skill.name} className="w-8 h-8" /> : <span>⚡</span>}

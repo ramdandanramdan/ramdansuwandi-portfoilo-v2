@@ -49,8 +49,8 @@ function StatCard({ label, value }: { label: string; value: string }) {
   const { count, ref } = useCountUp(isNum ? numValue : 0);
 
   return (
-    <div className="glass-card p-5 text-center">
-      <span ref={ref} className="text-3xl font-bold text-gradient tabular-nums">
+    <div className="glass-card p-3 md:p-5 text-center">
+      <span ref={ref} className="text-2xl md:text-3xl font-bold text-gradient tabular-nums">
         {isNum ? count : value}{isNum && <span className="text-lg">+</span>}
       </span>
       <p className="text-xs text-[var(--text-secondary)] mt-1.5 uppercase tracking-wider font-medium">{label}</p>
@@ -100,16 +100,16 @@ export default function AboutPage() {
   ];
 
   return (
-    <section className="py-24 relative">
+    <section className="py-16 md:py-24 relative">
       <div className="max-w-6xl mx-auto px-4">
         <SectionHeader title={about.title} subtitle={home?.tagline || 'About me'} />
 
         {/* Profile */}
         <div className="mt-16 mb-16">
-          <div className="glass-card p-6 md:p-8 relative overflow-hidden">
+          <div className="glass-card p-4 md:p-8 relative overflow-hidden">
             <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-gradient-to-b from-[var(--electric-blue)] to-[var(--neon-green)]" />
-            <div className="grid md:grid-cols-5 gap-8 md:gap-12 items-start">
-              <div className="md:col-span-2">
+            <div className="md:grid md:grid-cols-5 gap-8 md:gap-12 items-start">
+              <div className="md:col-span-2 max-w-[280px] mx-auto md:max-w-none">
                 <div className="rounded-xl shadow-lg border border-[var(--glass-border)] overflow-hidden bg-[var(--dark-card)]">
                   {about.image_url ? (
                     <img src={about.image_url} alt={about.title} className="w-full h-auto" />
@@ -194,7 +194,7 @@ export default function AboutPage() {
         {/* Stats */}
         {statsList.length > 0 && (
           <div className="mb-16">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 md:gap-4">
               {statsList.map((s, i) => (
                 <motion.div
                   key={i}

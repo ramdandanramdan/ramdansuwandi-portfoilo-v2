@@ -79,7 +79,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             <div
               className="relative h-full rounded-2xl overflow-hidden cursor-pointer transition-all duration-700"
               style={{
-                minHeight: '290px',
+                minHeight: '240px',
                 background: 'linear-gradient(135deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01))',
                 backdropFilter: 'blur(20px)',
                 WebkitBackdropFilter: 'blur(20px)',
@@ -140,7 +140,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
               </div>
 
               {/* Content */}
-              <div className="absolute inset-0 flex flex-col justify-end p-5 md:p-6 z-10">
+              <div className="absolute inset-0 flex flex-col justify-end p-4 md:p-6 z-10">
                 {project.category && (
                   <div className="mb-2.5">
                     <span className="text-[10px] font-semibold tracking-wide text-[var(--electric-blue)]/80 bg-[var(--electric-blue)]/8 px-2.5 py-1 rounded-full border border-[var(--electric-blue)]/12 backdrop-blur-sm">
@@ -200,7 +200,7 @@ export default function ProjectsPage() {
   if (projects.length === 0) return null;
 
   return (
-    <section className="py-24 relative">
+    <section className="py-16 md:py-24 relative">
       {/* Ambient light */}
       <div className="absolute top-1/4 left-1/3 w-[400px] h-[400px] rounded-full opacity-[0.04] pointer-events-none"
         style={{ background: 'radial-gradient(circle, var(--electric-blue), transparent 70%)' }}

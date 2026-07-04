@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { DragDropContext, Droppable, Draggable, type DropResult } from '@hello-pangea/dnd';
 import { updateOrderBatch } from '@/lib/actions';
@@ -27,6 +27,10 @@ export default function DataTable({ title, items, columns, basePath, section, on
   const [saving, setSaving] = useState(false);
   const { toast } = useToast();
 
+  useEffect(() => {
+    setOrderedItems(items);
+  }, [items]);
+
   const handleDragEnd = async (result: DropResult) => {
     if (!result.destination) return;
 
@@ -35,17 +39,19 @@ export default function DataTable({ title, items, columns, basePath, section, on
     reordered.splice(result.destination.index, 0, moved);
 
     setOrderedItems(reordered);
-
     setSaving(true);
+
     try {
       const batch = reordered.map((item, i) => ({
         id: item.id as string,
         order_index: i,
       }));
       await updateOrderBatch(section, batch);
+      toast('Order updated');
     } catch (e) {
       console.error(e);
       setOrderedItems(items);
+      toast('Failed to save order', 'error');
     }
     setSaving(false);
   };
@@ -60,7 +66,7 @@ export default function DataTable({ title, items, columns, basePath, section, on
     }
   };
 
-  const displayItems = orderedItems.length === items.length ? orderedItems : items;
+  const displayItems = orderedItems;
 
   return (
     <div className="space-y-4 md:space-y-6">

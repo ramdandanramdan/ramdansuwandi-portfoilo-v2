@@ -51,6 +51,25 @@ export default function HeroSection({ home }: { home: Home }) {
 
   return (
     <section className="min-h-[calc(100vh-4rem)] flex items-center relative overflow-hidden py-12 md:py-20">
+      {/* Desktop view disclaimer */}
+      <motion.div
+        className="fixed top-20 left-1/2 -translate-x-1/2 z-40 pointer-events-none"
+        animate={{ opacity: [0, 1, 0.8, 1, 0], y: [0, 4, 0, 4, 0] }}
+        transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+      >
+        <div className="px-4 py-2 rounded-full text-[10px] sm:text-xs font-medium whitespace-nowrap backdrop-blur-md"
+          style={{
+            background: 'rgba(0, 212, 255, 0.08)',
+            border: '1px solid rgba(0, 212, 255, 0.15)',
+            color: 'var(--text-secondary)',
+            boxShadow: '0 0 20px rgba(0, 212, 255, 0.05)',
+          }}
+        >
+          <span className="hidden sm:inline">💻 For the best experience, please view this site on a desktop device</span>
+          <span className="sm:hidden">💻 Best viewed on desktop</span>
+        </div>
+      </motion.div>
+
       <div className="max-w-7xl mx-auto px-4 w-full relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-center">
 

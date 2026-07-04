@@ -66,9 +66,11 @@ interface ImageCropperProps {
   onSaveBatch?: (croppedFiles: File[]) => void;
   aspect?: number;
   batchFiles?: File[];
+  originalFile?: File;
+  originalFiles?: File[];
 }
 
-export default function ImageCropper({ imageSrc, onCancel, onSave, onSaveBatch, aspect: defaultAspect, batchFiles }: ImageCropperProps) {
+export default function ImageCropper({ imageSrc, onCancel, onSave, onSaveBatch, aspect: defaultAspect, batchFiles, originalFile, originalFiles }: ImageCropperProps) {
   const [selectedPreset, setSelectedPreset] = useState<number>(
     defaultAspect ? PRESETS.findIndex((p) => p.ratio === defaultAspect) : 0,
   );
@@ -249,6 +251,23 @@ export default function ImageCropper({ imageSrc, onCancel, onSave, onSaveBatch, 
           )}
 
           <div className="flex items-center justify-end gap-2">
+            <button
+              type="button"
+              onClick={() => {
+                if (batchFiles && onSaveBatch) {
+                  const all = originalFiles
+                    ? [originalFile!, ...originalFiles].filter(Boolean) as File[]
+                    : [originalFile!, ...batchFiles].filter(Boolean) as File[];
+                  onSaveBatch(all);
+                } else if (originalFile) {
+                  onSave(originalFile);
+                }
+                onCancel();
+              }}
+              className="px-4 py-2 rounded-lg text-sm border border-[var(--glass-border)] text-[var(--text-secondary)] hover:text-white hover:border-[var(--electric-blue)]/50 transition-all"
+            >
+              Upload Original
+            </button>
             <button
               type="button"
               onClick={onCancel}

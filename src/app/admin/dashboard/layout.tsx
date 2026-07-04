@@ -61,7 +61,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         onMobileClose={() => setMobileSidebarOpen(false)}
       />
       <ToastProvider>
-        <main className="flex-1 min-h-screen relative z-10 transition-all duration-300 md:ml-60">
+        <main className="flex-1 min-h-screen relative z-10 transition-all duration-300 md:ml-[320px]">
           {/* Top bar */}
           <div className="sticky top-0 z-20 backdrop-blur-xl bg-[var(--dark-bg)]/80 border-b border-[var(--glass-border)]">
             <div className="flex items-center justify-between h-14 px-3 md:px-6">

@@ -7,7 +7,6 @@ import { listItems, deleteItem } from '@/lib/actions';
 
 const columns = [
   { key: 'title', label: 'Title' },
-  { key: 'category', label: 'Category' },
   { key: 'featured', label: 'Featured', render: (v: unknown) => v ? '⭐' : '' },
   { key: 'is_active', label: 'Active', render: (v: unknown) => v ? '✅' : '❌' },
 ];
@@ -37,14 +36,40 @@ export default function ProjectsPage() {
 
   if (loading) return <div className="flex justify-center py-20"><div className="w-8 h-8 border-2 border-[var(--electric-blue)] border-t-transparent rounded-full animate-spin" /></div>;
 
+  const professional = items.filter((i) => i.category === 'professional');
+  const personal = items.filter((i) => i.category === 'personal');
+
   return (
-    <DataTable
-      title="Projects"
-      items={items}
-      columns={columns}
-      basePath="/admin/dashboard/projects"
-      section="projects"
-      onDelete={handleDelete}
-    />
+    <div className="space-y-10">
+      <div>
+        <div className="flex items-center gap-3 mb-4">
+          <div className="w-3 h-3 rounded-full bg-[var(--electric-blue)]" />
+          <h3 className="text-lg font-semibold text-white">Proyek Profesional</h3>
+        </div>
+        <DataTable
+          title=""
+          items={professional}
+          columns={columns}
+          basePath="/admin/dashboard/projects"
+          section="projects"
+          onDelete={handleDelete}
+        />
+      </div>
+
+      <div>
+        <div className="flex items-center gap-3 mb-4">
+          <div className="w-3 h-3 rounded-full bg-[var(--neon-green)]" />
+          <h3 className="text-lg font-semibold text-white">Proyek Pribadi</h3>
+        </div>
+        <DataTable
+          title=""
+          items={personal}
+          columns={columns}
+          basePath="/admin/dashboard/projects"
+          section="projects"
+          onDelete={handleDelete}
+        />
+      </div>
+    </div>
   );
 }

@@ -59,9 +59,8 @@ export default function ItemForm({ title, fields, initialData, section, basePath
   const [expandedGroupField, setExpandedGroupField] = useState<string | null>(null);
   const [cropImageSrc, setCropImageSrc] = useState<string | null>(null);
   const [cropFieldName, setCropFieldName] = useState<string>('');
-  const [cropQueue, setCropQueue] = useState<File[]>([]);
-  const cropFieldTypeRef = useRef<'single' | 'multiple'>('single');
-  const cropPendingFilesRef = useRef<File[]>([]);
+  const [cropMode, setCropMode] = useState<'single' | 'multiple'>('single');
+  const [cropPendingFiles, setCropPendingFiles] = useState<File[]>([]);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -116,9 +115,9 @@ export default function ItemForm({ title, fields, initialData, section, basePath
   const handleFileChange = (name: string, file: File | null) => {
     if (file) {
       if (file.type.startsWith('image/')) {
-        cropFieldTypeRef.current = 'single';
+        setCropMode('single');
         setCropFieldName(name);
-        cropPendingFilesRef.current = [file];
+        setCropPendingFiles([file]);
         setCropImageSrc(URL.createObjectURL(file));
       } else {
         handleChange(name, file);
@@ -129,7 +128,7 @@ export default function ItemForm({ title, fields, initialData, section, basePath
 
   const handleCropSave = useCallback((croppedFile: File) => {
     const fieldName = cropFieldName;
-    if (cropFieldTypeRef.current === 'single') {
+    if (cropMode === 'single') {
       handleChange(fieldName, croppedFile);
       const previewUrl = URL.createObjectURL(croppedFile);
       setPreviews((prev) => ({ ...prev, [fieldName]: previewUrl }));
@@ -139,7 +138,7 @@ export default function ItemForm({ title, fields, initialData, section, basePath
       const next = [...current, croppedFile];
       handleChange(fieldName, next);
     }
-  }, [cropFieldName, formData]);
+  }, [cropFieldName, formData, cropMode]);
 
   const handleRemoveFile = (name: string) => {
     handleChange(name, '');
@@ -646,9 +645,9 @@ export default function ItemForm({ title, fields, initialData, section, basePath
                   const newFiles = files.slice(0, remaining);
                   if (newFiles.length > 0) {
                     if (newFiles[0].type.startsWith('image/')) {
-                      cropFieldTypeRef.current = 'multiple';
+                      setCropMode('multiple');
                       setCropFieldName(field.name);
-                      cropPendingFilesRef.current = newFiles;
+                      setCropPendingFiles(newFiles);
                       setCropImageSrc(URL.createObjectURL(newFiles[0]));
                     } else {
                       handleChange(field.name, [...items, ...newFiles]);
@@ -746,8 +745,10 @@ export default function ItemForm({ title, fields, initialData, section, basePath
       {cropImageSrc && (
         <ImageCropper
           imageSrc={cropImageSrc}
+          originalFile={cropMode === 'single' ? cropPendingFiles[0] : undefined}
+          originalFiles={cropMode === 'multiple' ? cropPendingFiles.slice(1) : undefined}
           onCancel={() => {
-            cropPendingFilesRef.current = [];
+            setCropPendingFiles([]);
             setCropImageSrc(null);
           }}
           onSave={handleCropSave}
@@ -757,7 +758,7 @@ export default function ItemForm({ title, fields, initialData, section, basePath
             handleChange(fieldName, [...current, ...files]);
             setCropImageSrc(null);
           }}
-          batchFiles={cropFieldTypeRef.current === 'multiple' ? cropPendingFilesRef.current.slice(1) : undefined}
+          batchFiles={cropMode === 'multiple' ? cropPendingFiles.slice(1) : undefined}
         />
       )}
     </motion.div>

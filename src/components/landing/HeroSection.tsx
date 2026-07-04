@@ -66,7 +66,7 @@ export default function HeroSection({ home }: { home: Home }) {
             boxShadow: '0 0 30px rgba(0, 212, 255, 0.03)',
           }}
         >
-          💻 Biar makin puas, buka pakai laptop/desktop ya
+          💻 Disarankan mengakses situs ini melalui laptop/desktop untuk pengalaman terbaik
         </div>
       </motion.div>
 

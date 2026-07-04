@@ -3,7 +3,6 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { DragDropContext, Droppable, Draggable, type DropResult } from '@hello-pangea/dnd';
 import { supabase } from '@/lib/supabase';
 import { listItems, deleteItem, updateContactField, updateOrderBatch, getHomeSettings, uploadImage, updateResumeUrl } from '@/lib/actions';
 import { useToast } from '@/components/admin/Toast';
@@ -98,11 +97,11 @@ export default function ContactPage() {
     } catch (e) { console.error(e); toast('Failed to update status', 'error'); }
   };
 
-  const handleDragEnd = async (result: DropResult) => {
-    if (!result.destination) return;
+  const moveLink = async (index: number, direction: 'up' | 'down') => {
+    const targetIndex = direction === 'up' ? index - 1 : index + 1;
+    if (targetIndex < 0 || targetIndex >= orderedLinks.length) return;
     const reordered = Array.from(orderedLinks);
-    const [moved] = reordered.splice(result.source.index, 1);
-    reordered.splice(result.destination.index, 0, moved);
+    [reordered[index], reordered[targetIndex]] = [reordered[targetIndex], reordered[index]];
     setOrderedLinks(reordered);
     setSaving(true);
     try {
@@ -167,7 +166,7 @@ export default function ContactPage() {
             <div className="bg-[var(--dark-card)] border border-[var(--glass-border)] rounded-xl overflow-hidden">
               <div className="flex items-center justify-between px-5 py-4 border-b border-[var(--glass-border)]">
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-medium text-[var(--text-secondary)]">Drag to reorder · {socialLinks.length} link{socialLinks.length !== 1 ? 's' : ''}</span>
+                  <span className="text-xs font-medium text-[var(--text-secondary)]">{socialLinks.length} link{socialLinks.length !== 1 ? 's' : ''}</span>
                 </div>
                 <Link href="/admin/dashboard/contact/new">
                   <button className="px-3 py-1.5 rounded-lg text-xs font-semibold text-black transition-all hover:shadow-lg" style={{background: 'linear-gradient(135deg, var(--electric-blue), var(--neon-green))'}}>
@@ -176,64 +175,69 @@ export default function ContactPage() {
                 </Link>
               </div>
 
-              <DragDropContext onDragEnd={handleDragEnd}>
-                <Droppable droppableId="contact-links">
-                  {(provided) => (
-                    <div ref={provided.innerRef} {...provided.droppableProps}>
-                      {socialLinks.length === 0 ? (
-                        <div className="text-center py-16 text-[var(--text-secondary)] text-sm px-5">
-                          No social links yet. Click &ldquo;Add Link&rdquo; to create one.
+              {socialLinks.length === 0 ? (
+                <div className="text-center py-16 text-[var(--text-secondary)] text-sm px-5">
+                  No social links yet. Click &ldquo;Add Link&rdquo; to create one.
+                </div>
+              ) : (
+                socialLinks.map((item, index) => {
+                  const p = (item.platform as string) ?? '';
+                  const meta = platformMeta[p.toLowerCase()] ?? { color: 'var(--electric-blue)', icon: null };
+                  const isFirst = index === 0;
+                  const isLast = index === socialLinks.length - 1;
+                  return (
+                    <div key={item.id as string} className="border-b border-[var(--glass-border)] last:border-b-0 hover:bg-[rgba(255,255,255,0.03)] transition-colors">
+                      <div className="flex items-center gap-3 px-5 py-3.5">
+                        <div className="flex flex-col items-center gap-0.5 shrink-0">
+                          <button
+                            onClick={() => moveLink(index, 'up')}
+                            disabled={isFirst || saving}
+                            className={`p-0.5 rounded transition-all ${
+                              isFirst || saving
+                                ? 'text-[var(--glass-border)] cursor-not-allowed'
+                                : 'text-[var(--text-secondary)] hover:text-white hover:bg-[rgba(255,255,255,0.06)] cursor-pointer'
+                            }`}
+                            title="Move up"
+                          >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="18 15 12 9 6 15"/></svg>
+                          </button>
+                          <span className="text-[10px] text-[var(--text-secondary)] font-mono leading-none">{index + 1}</span>
+                          <button
+                            onClick={() => moveLink(index, 'down')}
+                            disabled={isLast || saving}
+                            className={`p-0.5 rounded transition-all ${
+                              isLast || saving
+                                ? 'text-[var(--glass-border)] cursor-not-allowed'
+                                : 'text-[var(--text-secondary)] hover:text-white hover:bg-[rgba(255,255,255,0.06)] cursor-pointer'
+                            }`}
+                            title="Move down"
+                          >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="6 9 12 15 18 9"/></svg>
+                          </button>
                         </div>
-                      ) : (
-                        socialLinks.map((item, index) => {
-                          const p = (item.platform as string) ?? '';
-                          const meta = platformMeta[p.toLowerCase()] ?? { color: 'var(--electric-blue)', icon: null };
-                          return (
-                            <Draggable key={item.id as string} draggableId={item.id as string} index={index}>
-                              {(provided, snapshot) => (
-                                <div
-                                  ref={provided.innerRef}
-                                  {...provided.draggableProps}
-                                  className={`border-b border-[var(--glass-border)] last:border-b-0 transition-colors ${
-                                    snapshot.isDragging
-                                      ? 'bg-[var(--electric-blue)]/10 shadow-lg'
-                                      : 'hover:bg-[rgba(255,255,255,0.03)]'
-                                  }`}
-                                >
-                                  <div className="flex items-center gap-3 px-5 py-3.5">
-                                    <div {...provided.dragHandleProps} className="text-[var(--text-secondary)] cursor-grab active:cursor-grabbing shrink-0">
-                                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="18" x2="16" y2="18"/></svg>
-                                    </div>
-                                    <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style={{ background: `${meta.color}15`, color: meta.color }}>
-                                      {meta.icon ?? (
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-                                      )}
-                                    </div>
-                                    <div className="flex-1 min-w-0">
-                                      <div className="flex items-center gap-2">
-                                        <span className="text-sm font-semibold text-white truncate">{item.label as string}</span>
-                                        <span className="text-[10px] px-1.5 py-0.5 rounded-full font-medium shrink-0" style={{ background: `${meta.color}15`, color: meta.color }}>{p}</span>
-                                      </div>
-                                      <p className="text-xs text-[var(--text-secondary)] truncate mt-0.5">{item.value as string}</p>
-                                    </div>
-                                    <div className="flex items-center gap-1.5 shrink-0">
-                                      <Link href={`/admin/dashboard/contact/${item.id}`}>
-                                        <button className="px-2.5 py-1.5 rounded-lg text-[11px] font-medium text-white transition-all hover:bg-[var(--electric-blue)]">Edit</button>
-                                      </Link>
-                                      <button onClick={() => handleDelete(item.id as string)} className="px-2.5 py-1.5 rounded-lg text-[11px] font-medium text-red-400 transition-all hover:bg-red-500/15">Delete</button>
-                                    </div>
-                                  </div>
-                                </div>
-                              )}
-                            </Draggable>
-                          );
-                        })
-                      )}
-                      {provided.placeholder}
+                        <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style={{ background: `${meta.color}15`, color: meta.color }}>
+                          {meta.icon ?? (
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                          )}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm font-semibold text-white truncate">{item.label as string}</span>
+                            <span className="text-[10px] px-1.5 py-0.5 rounded-full font-medium shrink-0" style={{ background: `${meta.color}15`, color: meta.color }}>{p}</span>
+                          </div>
+                          <p className="text-xs text-[var(--text-secondary)] truncate mt-0.5">{item.value as string}</p>
+                        </div>
+                        <div className="flex items-center gap-1.5 shrink-0">
+                          <Link href={`/admin/dashboard/contact/${item.id}`}>
+                            <button className="px-2.5 py-1.5 rounded-lg text-[11px] font-medium text-white transition-all hover:bg-[var(--electric-blue)]">Edit</button>
+                          </Link>
+                          <button onClick={() => handleDelete(item.id as string)} className="px-2.5 py-1.5 rounded-lg text-[11px] font-medium text-red-400 transition-all hover:bg-red-500/15">Delete</button>
+                        </div>
+                      </div>
                     </div>
-                  )}
-                </Droppable>
-              </DragDropContext>
+                  );
+                })
+              )}
             </div>
           </div>
 

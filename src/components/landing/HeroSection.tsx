@@ -180,7 +180,7 @@ export default function HeroSection({ home }: { home: Home }) {
                   }}
                 />
                 <span className="relative text-[11px] sm:text-xs font-medium" style={{ color: 'rgba(255,255,255,0.45)' }}>
-                  💻 Disarankan mengakses situs ini melalui laptop/desktop untuk pengalaman terbaik
+                  💻 For the best experience, please open on a laptop or desktop
                 </span>
               </div>
 

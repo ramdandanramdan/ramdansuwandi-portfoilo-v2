@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import Link from 'next/link';
 import { DragDropContext, Droppable, Draggable, type DropResult } from '@hello-pangea/dnd';
 import { updateOrderBatch } from '@/lib/actions';
@@ -27,11 +27,7 @@ export default function DataTable({ title, items, columns, basePath, section, on
   const [saving, setSaving] = useState(false);
   const { toast } = useToast();
 
-  useEffect(() => {
-    setOrderedItems(items);
-  }, [items]);
-
-  const handleDragEnd = async (result: DropResult) => {
+  const handleDragEnd = useCallback(async (result: DropResult) => {
     if (!result.destination) return;
 
     const reordered = Array.from(orderedItems);
@@ -47,14 +43,13 @@ export default function DataTable({ title, items, columns, basePath, section, on
         order_index: i,
       }));
       await updateOrderBatch(section, batch);
-      toast('Order updated');
     } catch (e) {
       console.error(e);
-      setOrderedItems(items);
+      setOrderedItems(orderedItems);
       toast('Failed to save order', 'error');
     }
     setSaving(false);
-  };
+  }, [orderedItems, section, toast]);
 
   const handleDeleteItem = async (id: string) => {
     if (!confirm('Delete this item?')) return;
@@ -66,13 +61,80 @@ export default function DataTable({ title, items, columns, basePath, section, on
     }
   };
 
-  const displayItems = orderedItems;
+  const allItems = orderedItems.length === items.length ? orderedItems : items;
+
+  const row = (item: Record<string, unknown>, index: number, provided: any, snapshot: any) => (
+    <div
+      ref={provided.innerRef}
+      {...provided.draggableProps}
+      className={`flex items-center border-b border-[var(--glass-border)] transition-colors ${
+        snapshot.isDragging ? 'bg-[var(--electric-blue)]/10 shadow-lg' : 'hover:bg-[rgba(255,255,255,0.03)]'
+      }`}
+      style={provided.draggableProps.style}
+    >
+      <div className="w-10 px-2 py-3 shrink-0 flex justify-center" {...provided.dragHandleProps}>
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-[var(--text-secondary)] cursor-grab active:cursor-grabbing"><line x1="8" y1="6" x2="16" y2="6" /><line x1="8" y1="12" x2="16" y2="12" /><line x1="8" y1="18" x2="16" y2="18" /></svg>
+      </div>
+      {columns.map((col) => (
+        <div key={col.key} className="flex-1 px-4 py-3 text-sm text-[var(--text-primary)] min-w-0 truncate">
+          {col.render ? col.render(item[col.key], item) : String(item[col.key] ?? '')}
+        </div>
+      ))}
+      <div className="w-28 px-4 py-3 shrink-0 flex items-center justify-end gap-2">
+        <Link href={`${basePath}/${item.id}`}>
+          <button className="px-3 py-1.5 rounded-lg text-xs font-semibold text-black" style={{background: 'var(--electric-blue)'}}>Edit</button>
+        </Link>
+        <button onClick={() => handleDeleteItem(item.id as string)} className="px-3 py-1.5 rounded-lg text-xs font-semibold text-white bg-red-500 hover:bg-red-600">Delete</button>
+      </div>
+    </div>
+  );
+
+  const card = (item: Record<string, unknown>, index: number, provided: any, snapshot: any) => (
+    <div
+      ref={provided.innerRef}
+      {...provided.draggableProps}
+      className={`bg-[var(--dark-card)] border border-[var(--glass-border)] rounded-xl p-4 transition-all ${
+        snapshot.isDragging ? 'bg-[var(--electric-blue)]/10 shadow-lg border-[var(--electric-blue)]/30' : ''
+      }`}
+      style={provided.draggableProps.style}
+    >
+      <div className="flex items-center gap-3 mb-3">
+        <div {...provided.dragHandleProps} className="p-1 -ml-1 cursor-grab active:cursor-grabbing">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-[var(--text-secondary)]"><line x1="8" y1="6" x2="16" y2="6" /><line x1="8" y1="12" x2="16" y2="12" /><line x1="8" y1="18" x2="16" y2="18" /></svg>
+        </div>
+        <span className="text-[11px] text-[var(--text-secondary)] font-mono">#{index + 1}</span>
+      </div>
+      <div className="space-y-2 mb-4">
+        {columns.map((col) => (
+          <div key={col.key} className="flex items-start gap-2">
+            <span className="text-[10px] text-[var(--text-secondary)] uppercase tracking-wider font-medium min-w-[70px] shrink-0 pt-0.5">
+              {col.label}
+            </span>
+            <span className="text-sm text-[var(--text-primary)] break-words min-w-0 flex-1">
+              {col.render ? col.render(item[col.key], item) : String(item[col.key] ?? '—')}
+            </span>
+          </div>
+        ))}
+      </div>
+      <div className="flex items-center gap-2 pt-3 border-t border-[var(--glass-border)]">
+        <Link href={`${basePath}/${item.id}`} className="flex-1">
+          <button className="w-full px-3 py-2 rounded-lg text-xs font-semibold text-black transition-all" style={{background: 'var(--electric-blue)'}}>Edit</button>
+        </Link>
+        <button
+          onClick={() => handleDeleteItem(item.id as string)}
+          className="flex-1 px-3 py-2 rounded-lg text-xs font-semibold text-white bg-red-500 hover:bg-red-600 transition-colors"
+        >
+          Delete
+        </button>
+      </div>
+    </div>
+  );
 
   return (
     <div className="space-y-4 md:space-y-6">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <h2 className="text-lg md:text-xl font-bold text-white">{title}</h2>
+          {title && <h2 className="text-lg md:text-xl font-bold text-white">{title}</h2>}
           {saving && <div className="w-4 h-4 border-2 border-[var(--electric-blue)] border-t-transparent rounded-full animate-spin" />}
         </div>
         <Link href={`${basePath}/new`}>
@@ -83,7 +145,6 @@ export default function DataTable({ title, items, columns, basePath, section, on
       </div>
 
       <DragDropContext onDragEnd={handleDragEnd}>
-        {/* Desktop table view */}
         <div className="hidden md:block bg-[var(--dark-card)] border border-[var(--glass-border)] rounded-xl overflow-hidden">
           <div className="flex items-center border-b border-[var(--glass-border)] text-xs font-medium text-[var(--text-secondary)] uppercase tracking-wider">
             <div className="w-10 px-2 py-3 shrink-0" />
@@ -92,40 +153,15 @@ export default function DataTable({ title, items, columns, basePath, section, on
             ))}
             <div className="w-28 px-4 py-3 text-right shrink-0">Actions</div>
           </div>
-
           <Droppable droppableId="table-body">
             {(provided) => (
               <div ref={provided.innerRef} {...provided.droppableProps}>
-                {displayItems.length === 0 ? (
+                {allItems.length === 0 ? (
                   <div className="text-center py-8 text-[var(--text-secondary)] text-sm">No data found. Click &ldquo;Add New&rdquo; to create one.</div>
                 ) : (
-                  displayItems.map((item, index) => (
+                  allItems.map((item, index) => (
                     <Draggable key={item.id as string} draggableId={item.id as string} index={index}>
-                      {(provided, snapshot) => (
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          className={`flex items-center border-b border-[var(--glass-border)] transition-colors ${
-                            snapshot.isDragging ? 'bg-[var(--electric-blue)]/10 shadow-lg' : 'hover:bg-[rgba(255,255,255,0.03)]'
-                          }`}
-                          style={provided.draggableProps.style}
-                        >
-                          <div className="w-10 px-2 py-3 shrink-0 flex justify-center" {...provided.dragHandleProps}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-[var(--text-secondary)] cursor-grab active:cursor-grabbing"><line x1="8" y1="6" x2="16" y2="6" /><line x1="8" y1="12" x2="16" y2="12" /><line x1="8" y1="18" x2="16" y2="18" /></svg>
-                          </div>
-                          {columns.map((col) => (
-                            <div key={col.key} className="flex-1 px-4 py-3 text-sm text-[var(--text-primary)] min-w-0 truncate">
-                              {col.render ? col.render(item[col.key], item) : String(item[col.key] ?? '')}
-                            </div>
-                          ))}
-                          <div className="w-28 px-4 py-3 shrink-0 flex items-center justify-end gap-2">
-                            <Link href={`${basePath}/${item.id}`}>
-                              <button className="px-3 py-1.5 rounded-lg text-xs font-semibold text-black" style={{background: 'var(--electric-blue)'}}>Edit</button>
-                            </Link>
-                            <button onClick={() => handleDeleteItem(item.id as string)} className="px-3 py-1.5 rounded-lg text-xs font-semibold text-white bg-red-500 hover:bg-red-600">Delete</button>
-                          </div>
-                        </div>
-                      )}
+                      {(provided, snapshot) => row(item, index, provided, snapshot)}
                     </Draggable>
                   ))
                 )}
@@ -135,58 +171,16 @@ export default function DataTable({ title, items, columns, basePath, section, on
           </Droppable>
         </div>
 
-        {/* Mobile card view */}
         <div className="md:hidden space-y-3">
           <Droppable droppableId="mobile-list">
             {(provided) => (
               <div ref={provided.innerRef} {...provided.droppableProps} className="space-y-3">
-                {displayItems.length === 0 ? (
+                {allItems.length === 0 ? (
                   <div className="text-center py-8 text-[var(--text-secondary)] text-sm">No data found. Click &ldquo;Add New&rdquo; to create one.</div>
                 ) : (
-                  displayItems.map((item, index) => (
+                  allItems.map((item, index) => (
                     <Draggable key={item.id as string} draggableId={item.id as string} index={index}>
-                      {(provided, snapshot) => (
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          className={`bg-[var(--dark-card)] border border-[var(--glass-border)] rounded-xl p-4 transition-all ${
-                            snapshot.isDragging ? 'bg-[var(--electric-blue)]/10 shadow-lg border-[var(--electric-blue)]/30' : ''
-                          }`}
-                          style={provided.draggableProps.style}
-                        >
-                          <div className="flex items-center gap-3 mb-3">
-                            <div {...provided.dragHandleProps} className="p-1 -ml-1 cursor-grab active:cursor-grabbing">
-                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-[var(--text-secondary)]"><line x1="8" y1="6" x2="16" y2="6" /><line x1="8" y1="12" x2="16" y2="12" /><line x1="8" y1="18" x2="16" y2="18" /></svg>
-                            </div>
-                            <span className="text-[11px] text-[var(--text-secondary)] font-mono">#{index + 1}</span>
-                          </div>
-
-                          <div className="space-y-2 mb-4">
-                            {columns.map((col) => (
-                              <div key={col.key} className="flex items-start gap-2">
-                                <span className="text-[10px] text-[var(--text-secondary)] uppercase tracking-wider font-medium min-w-[70px] shrink-0 pt-0.5">
-                                  {col.label}
-                                </span>
-                                <span className="text-sm text-[var(--text-primary)] break-words min-w-0 flex-1">
-                                  {col.render ? col.render(item[col.key], item) : String(item[col.key] ?? '—')}
-                                </span>
-                              </div>
-                            ))}
-                          </div>
-
-                          <div className="flex items-center gap-2 pt-3 border-t border-[var(--glass-border)]">
-                            <Link href={`${basePath}/${item.id}`} className="flex-1">
-                              <button className="w-full px-3 py-2 rounded-lg text-xs font-semibold text-black transition-all" style={{background: 'var(--electric-blue)'}}>Edit</button>
-                            </Link>
-                            <button
-                              onClick={() => handleDeleteItem(item.id as string)}
-                              className="flex-1 px-3 py-2 rounded-lg text-xs font-semibold text-white bg-red-500 hover:bg-red-600 transition-colors"
-                            >
-                              Delete
-                            </button>
-                          </div>
-                        </div>
-                      )}
+                      {(provided, snapshot) => card(item, index, provided, snapshot)}
                     </Draggable>
                   ))
                 )}

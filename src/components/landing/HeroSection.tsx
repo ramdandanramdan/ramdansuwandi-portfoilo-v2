@@ -51,19 +51,19 @@ export default function HeroSection({ home }: { home: Home }) {
 
   return (
     <section className="min-h-[calc(100vh-4rem)] flex items-center relative overflow-hidden py-12 md:py-20">
-      {/* Desktop view disclaimer - floating badge */}
+      {/* Desktop view disclaimer */}
       <motion.div
-        className="fixed z-40 pointer-events-none"
-        style={{ bottom: '20px', right: '20px' }}
-        animate={{ opacity: [0.4, 0.9, 0.4], scale: [0.98, 1.02, 0.98] }}
-        transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut' }}
+        className="absolute top-10 left-1/2 -translate-x-1/2 z-40 pointer-events-none w-full max-w-md px-4"
+        animate={{ opacity: [0.3, 0.85, 0.3], y: [0, 3, 0] }}
+        transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
       >
         <div
-          className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-[9px] sm:text-[11px] font-medium leading-tight backdrop-blur-md max-w-[180px] sm:max-w-none"
+          className="mx-auto w-fit px-4 py-2 rounded-xl text-[10px] sm:text-xs font-medium backdrop-blur-md text-center leading-snug"
           style={{
-            background: 'rgba(0, 0, 0, 0.4)',
-            border: '1px solid rgba(255, 255, 255, 0.06)',
-            color: 'rgba(255, 255, 255, 0.35)',
+            background: 'rgba(0, 212, 255, 0.06)',
+            border: '1px solid rgba(0, 212, 255, 0.1)',
+            color: 'rgba(255, 255, 255, 0.4)',
+            boxShadow: '0 0 30px rgba(0, 212, 255, 0.03)',
           }}
         >
           💻 Biar makin puas, buka pakai laptop/desktop ya

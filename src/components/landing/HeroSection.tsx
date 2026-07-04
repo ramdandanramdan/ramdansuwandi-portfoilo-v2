@@ -51,24 +51,7 @@ export default function HeroSection({ home }: { home: Home }) {
 
   return (
     <section className="min-h-[calc(100vh-4rem)] flex items-center relative overflow-hidden py-12 md:py-20">
-      {/* Desktop view disclaimer */}
-      <motion.div
-        className="absolute top-10 left-1/2 -translate-x-1/2 z-40 pointer-events-none w-full max-w-md px-4"
-        animate={{ opacity: [0.3, 0.85, 0.3], y: [0, 3, 0] }}
-        transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-      >
-        <div
-          className="mx-auto w-fit px-4 py-2 rounded-xl text-[10px] sm:text-xs font-medium backdrop-blur-md text-center leading-snug"
-          style={{
-            background: 'rgba(0, 212, 255, 0.06)',
-            border: '1px solid rgba(0, 212, 255, 0.1)',
-            color: 'rgba(255, 255, 255, 0.4)',
-            boxShadow: '0 0 30px rgba(0, 212, 255, 0.03)',
-          }}
-        >
-          💻 Disarankan mengakses situs ini melalui laptop/desktop untuk pengalaman terbaik
-        </div>
-      </motion.div>
+
 
       <div className="max-w-7xl mx-auto px-4 w-full relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-center">
@@ -177,6 +160,28 @@ export default function HeroSection({ home }: { home: Home }) {
                     Contact Me
                   </button>
                 </Link>
+              </div>
+
+              {/* Desktop disclaimer */}
+              <div
+                className="relative inline-flex items-center gap-2 px-4 py-2 rounded-full overflow-hidden mb-8"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(0,212,255,0.06), rgba(0,212,255,0.02))',
+                  border: '1px solid rgba(0,212,255,0.12)',
+                  animation: 'avail-float 3s ease-in-out infinite',
+                }}
+              >
+                <span
+                  className="absolute inset-0 pointer-events-none"
+                  style={{
+                    background: 'linear-gradient(90deg, transparent, rgba(0,212,255,0.08), transparent)',
+                    backgroundSize: '200% 100%',
+                    animation: 'avail-shimmer 3s ease-in-out infinite',
+                  }}
+                />
+                <span className="relative text-[11px] sm:text-xs font-medium" style={{ color: 'rgba(255,255,255,0.45)' }}>
+                  💻 Disarankan mengakses situs ini melalui laptop/desktop untuk pengalaman terbaik
+                </span>
               </div>
 
               {/* Social Links */}

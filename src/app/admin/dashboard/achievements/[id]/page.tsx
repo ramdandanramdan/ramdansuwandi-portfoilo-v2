@@ -12,7 +12,6 @@ const fields = [
   { name: 'certificate_url', label: 'Certificate File (img, jpg, pdf)', type: 'file' as const, accept: 'image/*,.pdf' },
   { name: 'certificate_external_url', label: 'Certificate URL (external)', type: 'url' as const },
   { name: 'category', label: 'Category', type: 'text' as const },
-  { name: 'order_index', label: 'Order', type: 'number' as const },
   { name: 'is_active', label: 'Active', type: 'checkbox' as const },
 ];
 

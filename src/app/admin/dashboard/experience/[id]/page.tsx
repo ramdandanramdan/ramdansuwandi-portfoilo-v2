@@ -30,7 +30,6 @@ const fields = [
   },
   { name: 'images', label: 'Images', type: 'multipleFiles' as const, accept: 'image/*', maxFiles: 10 },
   { name: 'documents', label: 'Documents', type: 'documents' as const, maxFiles: 10 },
-  { name: 'order_index', label: 'Order', type: 'number' as const },
   { name: 'is_active', label: 'Active', type: 'checkbox' as const },
 ];
 

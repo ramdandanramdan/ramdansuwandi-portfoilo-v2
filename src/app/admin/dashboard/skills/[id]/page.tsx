@@ -8,7 +8,6 @@ const fields = [
   { name: 'proficiency', label: 'Proficiency (0-100)', type: 'number' as const },
   { name: 'icon_url', label: 'Icon', type: 'file' as const, accept: 'image/*,.svg' },
   { name: 'color', label: 'Color (hex)', type: 'text' as const, placeholder: '#00d4ff' },
-  { name: 'order_index', label: 'Order', type: 'number' as const },
   { name: 'is_active', label: 'Active', type: 'checkbox' as const },
 ];
 

@@ -34,7 +34,6 @@ const fields = [
       { name: 'description', label: 'Description', type: 'textarea' as const },
     ],
   },
-  { name: 'order_index', label: 'Order', type: 'number' as const },
   { name: 'is_active', label: 'Active', type: 'checkbox' as const },
 ];
 

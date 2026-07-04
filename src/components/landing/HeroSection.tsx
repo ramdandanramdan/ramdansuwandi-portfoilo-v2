@@ -51,22 +51,22 @@ export default function HeroSection({ home }: { home: Home }) {
 
   return (
     <section className="min-h-[calc(100vh-4rem)] flex items-center relative overflow-hidden py-12 md:py-20">
-      {/* Desktop view disclaimer */}
+      {/* Desktop view disclaimer - floating badge */}
       <motion.div
-        className="fixed top-20 left-1/2 -translate-x-1/2 z-40 pointer-events-none"
-        animate={{ opacity: [0, 1, 0.8, 1, 0], y: [0, 4, 0, 4, 0] }}
-        transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+        className="fixed z-40 pointer-events-none"
+        style={{ bottom: '20px', right: '20px' }}
+        animate={{ opacity: [0.4, 0.9, 0.4], scale: [0.98, 1.02, 0.98] }}
+        transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut' }}
       >
-        <div className="px-4 py-2 rounded-full text-[10px] sm:text-xs font-medium whitespace-nowrap backdrop-blur-md"
+        <div
+          className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-[9px] sm:text-[11px] font-medium leading-tight backdrop-blur-md max-w-[180px] sm:max-w-none"
           style={{
-            background: 'rgba(0, 212, 255, 0.08)',
-            border: '1px solid rgba(0, 212, 255, 0.15)',
-            color: 'var(--text-secondary)',
-            boxShadow: '0 0 20px rgba(0, 212, 255, 0.05)',
+            background: 'rgba(0, 0, 0, 0.4)',
+            border: '1px solid rgba(255, 255, 255, 0.06)',
+            color: 'rgba(255, 255, 255, 0.35)',
           }}
         >
-          <span className="hidden sm:inline">💻 For the best experience, please view this site on a desktop device</span>
-          <span className="sm:hidden">💻 Best viewed on desktop</span>
+          💻 Biar makin puas, buka pakai laptop/desktop ya
         </div>
       </motion.div>
 

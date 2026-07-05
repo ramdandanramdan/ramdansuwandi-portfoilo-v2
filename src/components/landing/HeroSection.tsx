@@ -162,28 +162,6 @@ export default function HeroSection({ home }: { home: Home }) {
                 </Link>
               </div>
 
-              {/* Desktop disclaimer */}
-              <div
-                className="relative inline-flex items-center gap-2 px-4 py-2 rounded-full overflow-hidden mb-8"
-                style={{
-                  background: 'linear-gradient(135deg, rgba(0,212,255,0.06), rgba(0,212,255,0.02))',
-                  border: '1px solid rgba(0,212,255,0.12)',
-                  animation: 'avail-float 3s ease-in-out infinite',
-                }}
-              >
-                <span
-                  className="absolute inset-0 pointer-events-none"
-                  style={{
-                    background: 'linear-gradient(90deg, transparent, rgba(0,212,255,0.08), transparent)',
-                    backgroundSize: '200% 100%',
-                    animation: 'avail-shimmer 3s ease-in-out infinite',
-                  }}
-                />
-                <span className="relative text-[11px] sm:text-xs font-medium" style={{ color: 'rgba(255,255,255,0.45)' }}>
-                  💻 For the best experience, please open on a laptop or desktop
-                </span>
-              </div>
-
               {/* Social Links */}
               {socialLinks.length > 0 && (
                 <div className="flex items-center gap-3 flex-wrap mb-6">

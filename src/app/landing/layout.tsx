@@ -4,6 +4,7 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import InteractiveBackground3D from '@/components/landing/InteractiveBackground3D';
 import Navbar from '@/components/landing/Navbar';
 import Footer from '@/components/landing/Footer';
+import MobileDisclaimer from '@/components/landing/MobileDisclaimer';
 
 export default function LandingLayout({ children }: { children: React.ReactNode }) {
   const { scrollYProgress } = useScroll();
@@ -24,6 +25,7 @@ export default function LandingLayout({ children }: { children: React.ReactNode 
           {children}
         </main>
         <Footer />
+        <MobileDisclaimer />
       </div>
     </div>
   );
